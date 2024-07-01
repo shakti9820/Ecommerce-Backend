@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,9 +32,10 @@ public class AdminProductController {
     }
 
     @PostMapping("/addproduct")
-    public ResponseEntity<Object> addProduct(@RequestBody Product product, @RequestParam String adminId) {
+    public ResponseEntity<Object> addProduct(@RequestBody Product product, @RequestHeader("Adminid") String adminId) {
         try {
             // Add the product to the database and map it to the admin
+        	System.out.println(adminId);
             Product savedProduct = adminProductService.addProduct(product, adminId);
             return ResponseEntity.ok(savedProduct);
         } catch (Exception e) {

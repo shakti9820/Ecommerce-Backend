@@ -72,10 +72,11 @@ public class AdminAuthController {
 		 try {
 	    String username = admin.getUsername();
 	    String password = admin.getPassword();
-	    
+//	    AdminUser loggedInAdmin = adminService.findByUsernameAndPassword(username, password);
         ResponseEntity<?> authenticatedResponse=authController.authenticate(username,password);
 //        System.out.println(password);
         if (authenticatedResponse.getStatusCode().is2xxSuccessful()) {
+        	
         	AuthenticationResponse authResponse = (AuthenticationResponse) authenticatedResponse.getBody();
             return ResponseEntity.ok(authResponse);
         } else {
