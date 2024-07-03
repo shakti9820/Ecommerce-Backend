@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.bootspring.ecommerce.Admin.Entity.AdminUser;
 import com.bootspring.ecommerce.Admin.Repository.AdminRepository;
+import com.bootspring.ecommerce.Customer.Entity.CustomerUser;
+import com.bootspring.ecommerce.Customer.Repository.CustomerRepository;
 
 import java.util.ArrayList;
 
@@ -17,16 +19,30 @@ import java.util.ArrayList;
 public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private AdminRepository adminRepository; // Assuming you have a UserRepository to fetch user data from DB
+    private CustomerRepository userRepository;
+
+    @Autowired
+    private AdminRepository adminRepository;
+
+    public UserDetails loadUserByUsernameAndRole(String username, String role) throws UsernameNotFoundException {
+    	System.out.println((username));
+    	System.out.println(role);
+        if ("user".equalsIgnoreCase(role)) {
+            CustomerUser user = userRepository.findByUsername(username);
+            if (user != null) {
+                return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new ArrayList<>());
+            }
+        } else if ("admin".equalsIgnoreCase(role)) {
+            AdminUser admin = adminRepository.findByUsername(username);
+            if (admin != null) {
+                return new org.springframework.security.core.userdetails.User(admin.getUsername(), admin.getPassword(), new ArrayList<>());
+            }
+        }
+        throw new UsernameNotFoundException("User not found with username: " + username + " and role: " + role);
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Fetch the user from the database
-        AdminUser user = adminRepository.findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-        // Assuming user.getPassword() returns the hashed password
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new ArrayList<>());
+        throw new UnsupportedOperationException("Use loadUserByUsernameAndRole instead");
     }
 }

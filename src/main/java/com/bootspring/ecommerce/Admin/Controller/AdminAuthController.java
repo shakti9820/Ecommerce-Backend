@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.bootspring.ecommerce.Admin.Entity.AdminUser;
 import com.bootspring.ecommerce.Admin.Service.AdminService;
 import com.bootspring.ecommerce.Admin.jwt.controller.AuthController;
+import com.bootspring.ecommerce.Admin.jwt.model.AuthenticationRequest;
 import com.bootspring.ecommerce.Admin.jwt.model.AuthenticationResponse;
 
 @Controller
@@ -67,14 +68,13 @@ public class AdminAuthController {
 	
 	@PostMapping("/login")
 	@ResponseBody
-	public ResponseEntity<Object> adminLogin(@RequestBody AdminUser admin)  {
-//		 System.out.println("welcome to login");
+	public ResponseEntity<Object> adminLogin(@RequestBody AuthenticationRequest authenticationRequest)  {
+		 System.out.println("welcome to login");
 		 try {
-	    String username = admin.getUsername();
-	    String password = admin.getPassword();
+	   
 //	    AdminUser loggedInAdmin = adminService.findByUsernameAndPassword(username, password);
-        ResponseEntity<?> authenticatedResponse=authController.authenticate(username,password);
-//        System.out.println(password);
+        ResponseEntity<?> authenticatedResponse=authController.authenticate(authenticationRequest);
+        
         if (authenticatedResponse.getStatusCode().is2xxSuccessful()) {
         	
         	AuthenticationResponse authResponse = (AuthenticationResponse) authenticatedResponse.getBody();

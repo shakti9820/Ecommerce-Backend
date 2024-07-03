@@ -16,7 +16,7 @@ import com.bootspring.ecommerce.Admin.jwt.service.MyUserDetailsService;
 import com.bootspring.ecommerce.Admin.jwt.util.JwtUtil;
 
 @RestController
-@RequestMapping("/admin")
+//@RequestMapping("/admin")
 public class AuthController {
 
     @Autowired
@@ -28,27 +28,35 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtTokenUtil;
 
-    public ResponseEntity<?> authenticate( String Username,String Password) throws Exception {
-        try {
-            // Authenticate using authenticationManager
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(Username,Password)
-            );
-        } catch (BadCredentialsException e) {
-            // Throw exception if authentication fails
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
-        }
+    	public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+    	    try {
+    	        // Print authenticationRequest to check incoming data
+    	        System.out.println("Incoming Authentication Request: " + authenticationRequest);
 
-        // Load user details and generate JWT token
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(Username);
-        final String jwt = jwtTokenUtil.generateToken(userDetails);
+    	        // Authenticate using authenticationManager
+//    	        authenticationManager.authenticate(
+//    	                new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
+//    	        );
 
-        // Return JWT token in AuthenticationResponse
-        AuthenticationResponse response = new AuthenticationResponse(jwt);
-        return ResponseEntity.ok(response);
-    }
+    	        // Print authenticationRequest after authentication to verify data integrity
+    	        System.out.println("Authentication Request after AuthManager: " + authenticationRequest);
+
+    	        // Load user details and generate JWT token
+    	        final UserDetails userDetails = userDetailsService.loadUserByUsernameAndRole(authenticationRequest.getUsername(), authenticationRequest.getRole());
+    	        final String jwt = jwtTokenUtil.generateToken(userDetails,authenticationRequest.getRole());
+
+    	        // Return JWT token in AuthenticationResponse
+    	        AuthenticationResponse response = new AuthenticationResponse(jwt);
+    	        return ResponseEntity.ok(response);
+    	    } catch (BadCredentialsException e) {
+    	        // Handle authentication failure
+    	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+    	    }
+    	}
+
+    
 
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
-        return authenticate(authenticationRequest.getUsername(),authenticationRequest.getPassword());
+        return authenticate(authenticationRequest);
     }
 }
