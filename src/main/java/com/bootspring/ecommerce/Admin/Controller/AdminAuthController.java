@@ -69,7 +69,7 @@ public class AdminAuthController {
 	@PostMapping("/login")
 	@ResponseBody
 	public ResponseEntity<Object> adminLogin(@RequestBody AuthenticationRequest authenticationRequest)  {
-		 System.out.println("welcome to login");
+//		 System.out.println("welcome to login");
 		 try {
 	   
 //	    AdminUser loggedInAdmin = adminService.findByUsernameAndPassword(username, password);

@@ -31,7 +31,7 @@ public class AuthController {
     	public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
     	    try {
     	        // Print authenticationRequest to check incoming data
-    	        System.out.println("Incoming Authentication Request: " + authenticationRequest);
+//    	        System.out.println("Incoming Authentication Request: " + authenticationRequest);
 
     	        // Authenticate using authenticationManager
 //    	        authenticationManager.authenticate(
@@ -39,7 +39,7 @@ public class AuthController {
 //    	        );
 
     	        // Print authenticationRequest after authentication to verify data integrity
-    	        System.out.println("Authentication Request after AuthManager: " + authenticationRequest);
+//    	        System.out.println("Authentication Request after AuthManager: " + authenticationRequest);
 
     	        // Load user details and generate JWT token
     	        final UserDetails userDetails = userDetailsService.loadUserByUsernameAndRole(authenticationRequest.getUsername(), authenticationRequest.getRole());
