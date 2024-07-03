@@ -25,8 +25,8 @@ public class MyUserDetailsService implements UserDetailsService {
     private AdminRepository adminRepository;
 
     public UserDetails loadUserByUsernameAndRole(String username, String role) throws UsernameNotFoundException {
-    	System.out.println((username));
-    	System.out.println(role);
+//    	System.out.println((username));
+//    	System.out.println(role);
         if ("user".equalsIgnoreCase(role)) {
             CustomerUser user = userRepository.findByUsername(username);
             if (user != null) {
