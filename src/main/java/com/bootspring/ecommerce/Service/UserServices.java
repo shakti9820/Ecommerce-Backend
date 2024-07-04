@@ -10,6 +10,7 @@ import com.bootspring.ecommerce.Admin.Entity.AdminUser;
 import com.bootspring.ecommerce.Admin.Repository.AdminRepository;
 import com.bootspring.ecommerce.Admin.jwt.util.JwtUtil;
 import com.bootspring.ecommerce.Customer.Entity.CustomerUser;
+import com.bootspring.ecommerce.Customer.Repository.CustomerRepository;
 import com.bootspring.ecommerce.Entity.User;
 
 @Service
@@ -21,18 +22,32 @@ public class UserServices {
 
     @Autowired
     private AdminRepository adminRepository; 
+    
+    @Autowired
+    private CustomerRepository customerRepository; 
 
     public String getUserIdByToken(String token) {
         String username = jwtUtil.extractUsername(token);
         AdminUser adminUser = adminRepository.findByUsername(username);
         if (adminUser == null) {
-            throw new UsernameNotFoundException("User Id not found");
+            throw new UsernameNotFoundException("Admin Id not found");
         }
         
         return adminUser.getId();
     }
     
-    public User getUserDetailsByToken(String token) {
+    public User getUserDetailByToken(String token) {
+        String username = jwtUtil.extractUsername(token);
+        CustomerUser customerUser = customerRepository.findByUsername(username);
+        if (customerUser == null) {
+            throw new UsernameNotFoundException("User Id not found");
+        }
+        
+        User user=new User(customerUser.getId(), customerUser.getName(),customerUser.getUsername()); 
+        return user;
+    }
+    
+    public User getAdminDetailsByToken(String token) {
         String username = jwtUtil.extractUsername(token);
         AdminUser adminUser = adminRepository.findByUsername(username);
         if (adminUser == null) {

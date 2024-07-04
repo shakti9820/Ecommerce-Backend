@@ -23,11 +23,20 @@ public class UserController {
         return jwtUserDetailsService.getUserIdByToken(actualToken);
     }
     
-    @GetMapping("user-details")
+    @GetMapping("/admin/user-details")
+    public ResponseEntity<Object> getAdminDetails(@RequestHeader("Authorization") String token) {
+       
+        String actualToken = token.substring(7);
+        User user= jwtUserDetailsService.getAdminDetailsByToken(actualToken);
+        
+        return ResponseEntity.ok(user);
+    }
+    
+    @GetMapping("/user/user-details")
     public ResponseEntity<Object> getUserDetails(@RequestHeader("Authorization") String token) {
        
         String actualToken = token.substring(7);
-        User user= jwtUserDetailsService.getUserDetailsByToken(actualToken);
+        User user= jwtUserDetailsService.getUserDetailByToken(actualToken);
         
         return ResponseEntity.ok(user);
     }
