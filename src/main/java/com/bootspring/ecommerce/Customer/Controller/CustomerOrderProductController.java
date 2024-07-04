@@ -64,7 +64,7 @@ public class CustomerOrderProductController {
         }
     }
     
-    @PostMapping("/place_order")
+    @GetMapping("/place_order")
     public ResponseEntity<Object> placeOrder(@RequestParam String customerId, @RequestParam String productId) {
 //    	System.out.println(customerId);
         try {
